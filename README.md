@@ -1,2 +1,2 @@
-# smart_form_api
-Smart From API
+# smart_farm_api
+Smart Farm API
