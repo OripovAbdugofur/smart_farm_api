@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Farm API Loyihasi - Qadamma-qadam Ko'rsatma</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+        }
+        .header {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: white;
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+        }
+        .step-card {
+            margin-bottom: 1.5rem;
+            border: none;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+        .step-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        }
+        .code-block {
+            background-color: #2d2d2d;
+            color: #f8f9fa;
+            padding: 1rem;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+        }
+        .command {
+            color: #6aedff;
+        }
+        .comment {
+            color: #6c757d;
+            font-style: italic;
+        }
+        .file-structure {
+            background-color: #e9ecef;
+            padding: 1rem;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+        }
+        .note {
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+        .github-section {
+            background-color: #eef7ff;
+            padding: 2rem;
+            border-radius: 10px;
+            margin: 2rem 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="container">
+            <h1 class="display-4">Smart Farm API Loyihasi</h1>
+            <p class="lead">Qadamma-qamat ko'rsatma bilan Django REST Framework asosida API loyihasi</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="alert alert-info">
+                    <h4>Loyiha haqida</h4>
+                    <p>Bu "Smart Farm" - aqlli ferma boshqaruv tizimi uchun API. Loyiha sensorlar, qurilmalar va foydalanuvchilarni boshqarish imkoniyatini beradi.</p>
+                </div>
+
+                <!-- Step 1 -->
+                <div class="card step-card">
+                    <div class="card-header bg-primary text-white">
+                        <h3>1-qadam: Loyiha strukturasi va settings.py sozlash</h3>
+                    </div>
+                    <div class="card-body">
+                        <p>Loyiha papka strukturasi:</p>
+                        <div class="file-structure mb-3">
+                            smart_farm_api/<br>
+                            ├── venv/ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment"># Virtual environment</span><br>
+                            ├── manage.py<br>
+                            ├── requirements.txt<br>
+                            └── smart_farm/ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment"># Asosiy loyiha papkasi</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;├── __init__.py<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;├── settings.py &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment"># Sozlamalar</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;├── urls.py &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment"># URL konfiguratsiyasi</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;├── api/ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment"># API ilovasi</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;&nbsp;├── __init__.py<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;&nbsp;├── admin.py<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;&nbsp;├── apps.py<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;&nbsp;├── models.py &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment"># Ma'lumotlar bazasi modellari</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;&nbsp;├── serializers.py &nbsp;<span class="comment"># DRF Serializerlar</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;&nbsp;├── views.py &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment"># API ko'rinishlari</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;&nbsp;└── urls.py &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment"># API URLlari</span>
+                        </div>
+
+                        <p><code>smart_farm/settings.py</code> faylini quyidagicha sozlang:</p>
+                        <div class="code-block">
+                            <span class="command">INSTALLED_APPS</span> = [<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;'django.contrib.admin',<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;'django.contrib.auth',<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;'django.contrib.contenttypes',<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;'django.contrib.sessions',<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;'django.contrib.messages',<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;'django.contrib.staticfiles',<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment"># Qo'shimcha paketlar</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;'rest_framework',<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;'corsheaders',<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment"># Bizning ilovalar</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;'smart_farm.api',<br>
+                            ]<br><br>
+
+                            <span class="comment"># REST_FRAMEWORK sozlamalari</span><br>
+                            <span class="command">REST_FRAMEWORK</span> = {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;'DEFAULT_PERMISSION_CLASSES': [<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'rest_framework.permissions.IsAuthenticated',<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;],<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;'DEFAULT_AUTHENTICATION_CLASSES': [<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'rest_framework.authentication.SessionAuthentication',<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'rest_framework.authentication.BasicAuthentication',<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;],<br>
+                            }
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="card step-card">
+                    <div class="card-header bg-success text-white">
+                        <h3>2-qadam: Modellar yaratish</h3>
+                    </div>
+                    <div class="card-body">
+                        <p><code>smart_farm/api/models.py</code> faylida quyidagi modellarni yaratamiz:</p>
+                        <div class="code-block">
+                            from django.db import models<br>
+                            from django.contrib.auth.models import User<br><br>
+
+                            <span class="comment"># Sensor modeli</span><br>
+                            class Sensor(models.Model):<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;SENSOR_TYPES = [<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;('temperature', 'Harorat'),<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;('humidity', 'Namlik'),<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;('soil_moisture', 'Tuproq namligi'),<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;('light', 'Yorug\'lik'),<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;]<br><br>
+
+                            &nbsp;&nbsp;&nbsp;&nbsp;name = models.CharField(max_length=100)<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;sensor_type = models.CharField(max_length=20, choices=SENSOR_TYPES)<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;location = models.CharField(max_length=100)<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;is_active = models.BooleanField(default=True)<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;created_at = models.DateTimeField(auto_now_add=True)<br><br>
+
+                            &nbsp;&nbsp;&nbsp;&nbsp;def __str__(self):<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return f"{self.name} ({self.get_sensor_type_display()})"<br><br>
+
+                            <span class="comment"># Sensor ma'lumotlari modeli</span><br>
+                            class SensorData(models.Model):<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;sensor = models.ForeignKey(Sensor, on_delete=models.CASCADE)<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;value = models.FloatField()<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;timestamp = models.DateTimeField(auto_now_add=True)<br><br>
+
+                            &nbsp;&nbsp;&nbsp;&nbsp;class Meta:<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ordering = ['-timestamp']<br><br>
+
+                            &nbsp;&nbsp;&nbsp;&nbsp;def __str__(self):<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return f"{self.sensor.name}: {self.value} at {self.timestamp}"<br><br>
+
+                            <span class="comment"># Qurilma modeli</span><br>
+                            class Device(models.Model):<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;DEVICE_TYPES = [<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;('pump', 'Nasos'),<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;('fan', 'Ventilyator'),<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;('light', 'Yoritgich'),<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;('heater', 'Isitgich'),<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;]<br><br>
+
+                            &nbsp;&nbsp;&nbsp;&nbsp;name = models.CharField(max_length=100)<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;device_type = models.CharField(max_length=20, choices=DEVICE_TYPES)<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;location = models.CharField(max_length=100)<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;is_active = models.BooleanField(default=False)<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;created_at = models.DateTimeField(auto_now_add=True)<br><br>
+
+                            &nbsp;&nbsp;&nbsp;&nbsp;def __str__(self):<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return f"{self.name} ({self.get_device_type_display()})"
+                        </div>
+
+                        <div class="note">
+                            <strong>Eslatma:</strong> Modellarni yaratgandan so'ng, migratsiya qilish kerak:
+                            <div class="code-block">
+                                python manage.py makemigrations<br>
+                                python manage.py migrate
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="card step-card">
+                    <div class="card-header bg-info text-white">
+                        <h3>3-qadam: Serializerlar yaratish</h3>
+                    </div>
+                    <div class="card-body">
+                        <p><code>smart_farm/api/serializers.py</code> faylida quyidagi serializerlarni yaratamiz:</p>
+                        <div class="code-block">
+                            from rest_framework import serializers<br>
+                            from .models import Sensor, SensorData, Device<br><br>
+
+                            class SensorSerializer(serializers.ModelSerializer):<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;class Meta:<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;model = Sensor<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fields = '__all__'<br><br>
+
+                            class SensorDataSerializer(serializers.ModelSerializer):<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;class Meta:<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;model = SensorData<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fields = '__all__'<br><br>
+
+                            class DeviceSerializer(serializers.ModelSerializer):<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;class Meta:<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;model = Device<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fields = '__all__'
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 4 -->
+                <div class="card step-card">
+                    <div class="card-header bg-warning text-dark">
+                        <h3>4-qadam: Viewlar yaratish</h3>
+                    </div>
+                    <div class="card-body">
+                        <p><code>smart_farm/api/views.py</code> faylida quyidagi viewlarni yaratamiz:</p>
+                        <div class="code-block">
+                            from rest_framework import viewsets, permissions<br>
+                            from rest_framework.decorators import action<br>
+                            from rest_framework.response import Response<br>
+                            from django.shortcuts import get_object_or_404<br>
+                            from .models import Sensor, SensorData, Device<br>
+                            from .serializers import SensorSerializer, SensorDataSerializer, DeviceSerializer<br><br>
+
+                            class SensorViewSet(viewsets.ModelViewSet):<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;queryset = Sensor.objects.all()<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;serializer_class = SensorSerializer<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;permission_classes = [permissions.IsAuthenticated]<br><br>
+
+                            &nbsp;&nbsp;&nbsp;&nbsp;@action(detail=True, methods=['get'])<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;def data(self, request, pk=None):<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sensor = get_object_or_404(Sensor, pk=pk)<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sensor_data = SensorData.objects.filter(sensor=sensor).order_by('-timestamp')[:10]<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;serializer = SensorDataSerializer(sensor_data, many=True)<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return Response(serializer.data)<br><br>
+
+                            class SensorDataViewSet(viewsets.ModelViewSet):<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;queryset = SensorData.objects.all()<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;serializer_class = SensorDataSerializer<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;permission_classes = [permissions.IsAuthenticated]<br><br>
+
+                            class DeviceViewSet(viewsets.ModelViewSet):<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;queryset = Device.objects.all()<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;serializer_class = DeviceSerializer<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;permission_classes = [permissions.IsAuthenticated]<br><br>
+
+                            &nbsp;&nbsp;&nbsp;&nbsp;@action(detail=True, methods=['post'])<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;def toggle(self, request, pk=None):<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;device = get_object_or_404(Device, pk=pk)<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;device.is_active = not device.is_active<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;device.save()<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return Response({'status': 'toggled', 'is_active': device.is_active})
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 5 -->
+                <div class="card step-card">
+                    <div class="card-header bg-danger text-white">
+                        <h3>5-qadam: URL konfiguratsiyasi</h3>
+                    </div>
+                    <div class="card-body">
+                        <p>Avvalo, <code>smart_farm/api/urls.py</code> faylini yaratamiz:</p>
+                        <div class="code-block">
+                            from django.urls import path, include<br>
+                            from rest_framework.routers import DefaultRouter<br>
+                            from . import views<br><br>
+
+                            router = DefaultRouter()<br>
+                            router.register(r'sensors', views.SensorViewSet)<br>
+                            router.register(r'sensor-data', views.SensorDataViewSet)<br>
+                            router.register(r'devices', views.DeviceViewSet)<br><br>
+
+                            urlpatterns = [<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;path('', include(router.urls)),<br>
+                            ]
+                        </div>
+
+                        <p>Keyin, <code>smart_farm/urls.py</code> faylini yangilaymiz:</p>
+                        <div class="code-block">
+                            from django.contrib import admin<br>
+                            from django.urls import path, include<br>
+                            from rest_framework import routers<br><br>
+
+                            urlpatterns = [<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;path('admin/', admin.site.urls),<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;path('api/', include('smart_farm.api.urls')),<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),<br>
+                            ]
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 6 -->
+                <div class="card step-card">
+                    <div class="card-header bg-dark text-white">
+                        <h3>6-qadam: Admin panel sozlash</h3>
+                    </div>
+                    <div class="card-body">
+                        <p><code>smart_farm/api/admin.py</code> faylini quyidagicha yangilaymiz:</p>
+                        <div class="code-block">
+                            from django.contrib import admin<br>
+                            from .models import Sensor, SensorData, Device<br><br>
+
+                            @admin.register(Sensor)<br>
+                            class SensorAdmin(admin.ModelAdmin):<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;list_display = ('name', 'sensor_type', 'location', 'is_active', 'created_at')<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;list_filter = ('sensor_type', 'is_active', 'created_at')<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;search_fields = ('name', 'location')<br><br>
+
+                            @admin.register(SensorData)<br>
+                            class SensorDataAdmin(admin.ModelAdmin):<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;list_display = ('sensor', 'value', 'timestamp')<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;list_filter = ('sensor', 'timestamp')<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;readonly_fields = ('timestamp',)<br><br>
+
+                            @admin.register(Device)<br>
+                            class DeviceAdmin(admin.ModelAdmin):<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;list_display = ('name', 'device_type', 'location', 'is_active', 'created_at')<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;list_filter = ('device_type', 'is_active', 'created_at')<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;search_fields = ('name', 'location')
+                        </div>
+                    </div>
+                </div>
+
+                <!-- GitHub Section -->
+                <div class="github-section">
+                    <h2 class="mb-4">GitHub ga Joylash</h2>
+                    <p>Loyihani GitHub ga joylash uchun quyidagi qadamlarni bajaring:</p>
+
+                    <div class="card mb-3">
+                        <div class="card-header">1. GitHub hisobi va repository</div>
+                        <div class="card-body">
+                            <p>Avvalo, GitHub da hisob oching (agar yo'q bo'lsa). Keyin yangi repository yarating:</p>
+                            <ul>
+                                <li>Repository nomi: <code>smart-farm-api</code></li>
+                                <li>Description: "Smart Farm management system API built with Django REST Framework"</li>
+                                <li>Public repository</li>
+                                <li>Initialize with README ni belgilang</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="card mb-3">
+                        <div class="card-header">2. Git ni loyihada ishga tushirish</div>
+                        <div class="card-body">
+                            <p>Loyiha papkasida terminalda quyidagi buyruqlarni bajarING:</p>
+                            <div class="code-block">
+                                <span class="comment"># Git ni ishga tushirish</span><br>
+                                git init<br><br>
+
+                                <span class="comment"># GitHub repository bilan ulash</span><br>
+                                git remote add origin https://github.com/foydalanuvchi/smart-farm-api.git<br><br>
+
+                                <span class="comment"># Barcha fayllarni qo'shish</span><br>
+                                git add .<br><br>
+
+                                <span class="comment"># Commit yaratish</span><br>
+                                git commit -m "Initial commit: Smart Farm API project setup"<br><br>
+
+                                <span class="comment"># GitHub ga yuklash</span><br>
+                                git branch -M main<br>
+                                git push -u origin main
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">3. .gitignore fayli</div>
+                        <div class="card-body">
+                            <p>Loyiha papkasida <code>.gitignore</code> fayli yarating va quyidagi kontentni qo'shing:</p>
+                            <div class="code-block">
+                                <span class="comment"># Django</span><br>
+                                *.log<br>
+                                *.pot<br>
+                                *.pyc<br>
+                                __pycache__/<br>
+                                media/<br>
+                                staticfiles/<br><br>
+
+                                <span class="comment"># Virtual environment</span><br>
+                                venv/<br>
+                                env/<br>
+                                .venv/<br><br>
+
+                                <span class="comment"># Database</span><br>
+                                *.sqlite3<br>
+                                *.db<br><br>
+
+                                <span class="comment"># IDE</span><br>
+                                .vscode/<br>
+                                .idea/<br>
+                                *.swp<br>
+                                *.swo<br><br>
+
+                                <span class="comment"># Environment variables</span><br>
+                                .env<br>
+                                .env.local<br>
+                                .env.production
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 7 -->
+                <div class="card step-card">
+                    <div class="card-header bg-secondary text-white">
+                        <h3>7-qadam: Loyihani ishga tushirish va test qilish</h3>
+                    </div>
+                    <div class="card-body">
+                        <p>Loyihani ishga tushirish uchun quyidagi buyruqlarni bajarING:</p>
+                        <div class="code-block">
+                            <span class="comment"># Serverni ishga tushirish</span><br>
+                            python manage.py runserver<br><br>
+
+                            <span class="comment"># Superuser yaratish (admin panel uchun)</span><br>
+                            python manage.py createsuperuser
+                        </div>
+
+                        <p>Loyihani test qilish uchun:</p>
+                        <ol>
+                            <li>Brauzerda <code>http://localhost:8000/admin/</code> manziliga kiring va superuser hisobi bilan tizimga kiring</li>
+                            <li>Bir nechta sensorlar va qurilmalar qo'shing</li>
+                            <li><code>http://localhost:8000/api/sensors/</code> manziliga kiring va API ni tekshiring</li>
+                            <li>API endpoints larini ko'rish uchun <code>http://localhost:8000/api/</code> manziliga kiring</li>
+                        </ol>
+                    </div>
+                </div>
+
+                <div class="alert alert-success mt-4">
+                    <h4>Tabriklayman! Siz Django REST Framework asosida API loyihasini muvaffaqiyatli yaratdingiz.</h4>
+                    <p>Endi sizda ish beruvchiga ko'rsatish uchun ajoyib loyiha bor. Keyingi safar shu loyihaga o'xshash loyihani o'zingiz yaratishingiz mumkin.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-dark text-white text-center py-4 mt-5">
+        <p class="mb-0">Smart Farm API Loyihasi - Qadamma-qamat ko'rsatma</p>
+        <p>Django REST Framework | 2024</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
